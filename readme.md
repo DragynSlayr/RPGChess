@@ -1,1 +1,1 @@
-"An RPG style chess game" 
+An RPG style, turn-based chess game
