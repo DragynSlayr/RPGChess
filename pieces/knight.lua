@@ -7,7 +7,18 @@ function Knight.newKnight(row, column, team)
   knight.sprite = Sprite.load("pieces/knight.tga", 72, 126)
   
   function knight:getMoves()
-    self.moves[#self.moves + 1] = {self.row + 1, self.column + 1}
+    for row = 1, Constants.NUM_ROWS do
+      for col = 1, Constants.NUM_COLUMNS do
+        local move = {}
+        
+        move.row = col
+        move.column = row
+        
+        if MathHelper.getDistanceBetween(self, move) == math.sqrt(5) then
+          table.insert(self.moves, move)
+        end
+      end
+    end
   end
   
   return knight

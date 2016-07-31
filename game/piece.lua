@@ -16,6 +16,13 @@ function Piece.newPiece(row, column, team)
   
   piece.team = team
   piece.active = false
+  piece.moves_made = 0
+  
+  piece.forward_x = 1
+  
+  if piece.team == 2 then 
+    piece.forward_x = -1
+  end
   
   if piece.team == 1 then 
     piece.color = Board.player_one_color
@@ -45,8 +52,8 @@ function Piece.newPiece(row, column, team)
     love.graphics.setColor(255, 255, 255, 127)
     if self.active then
       for k, move in pairs(self.moves) do
-        local x = Constants.BOARD_ORIGIN_X + ((move[1] - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
-        local y = Constants.BOARD_ORIGIN_Y + ((move[2] - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+        local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
+        local y = Constants.BOARD_ORIGIN_Y + ((move.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
     end

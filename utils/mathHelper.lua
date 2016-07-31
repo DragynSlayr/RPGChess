@@ -75,6 +75,11 @@ function MathHelper.getRandomUnitStart(rad)
   return x, y
 end
 
+function MathHelper.isMultipleOf(a, b)
+  local quotient = a / b
+  return math.ceil(quotient) == math.floor(quotient)
+end
+
 MathHelper.load()
 
 return MathHelper

@@ -63,11 +63,12 @@ function Board.checkClick(row, col)
   for k, piece in pairs(Board.pieces) do 
     if piece.active then
       for k2, move in pairs(piece.moves) do
-        if move[1] == col and move[2] == row then
+        if move.row == col and move.column == row then
           piece.row = col
           piece.column = row
           piece.active = false
           piece.moves = {}
+          piece.moves_made = piece.moves_made + 1
         end
       end
       piece.active = false

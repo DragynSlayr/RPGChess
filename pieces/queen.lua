@@ -7,7 +7,24 @@ function Queen.newQueen(row, column, team)
   queen.sprite = Sprite.load("pieces/queen.tga", 62, 126)
   
   function queen:getMoves()
-    self.moves[#self.moves + 1] = {self.row + 1, self.column + 1}
+    for row = 1, Constants.NUM_ROWS do
+      for col = 1, Constants.NUM_COLUMNS do
+        local move = {}
+        
+        move.row = col
+        move.column = row
+        
+        local x_len = math.abs(self.row - move.row)
+        local y_len = math.abs(self.column - move.column)
+        
+        local row_same = self.row == move.row
+        local col_same = self.column == move.column
+        
+        if x_len == y_len or row_same or col_same then
+          table.insert(self.moves, move)
+        end
+      end
+    end
   end
   
   return queen

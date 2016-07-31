@@ -7,7 +7,20 @@ function King.newKing(row, column, team)
   king.sprite = Sprite.load("pieces/king.tga", 100, 126)
   
   function king:getMoves()
-    self.moves[#self.moves + 1] = {self.row + 1, self.column + 1}
+    for row = 1, Constants.NUM_ROWS do
+      for col = 1, Constants.NUM_COLUMNS do
+        local move = {}
+        
+        move.row = col
+        move.column = row
+        
+        local dist = MathHelper.getDistanceBetween(self, move)
+        
+        if dist == 1 or dist == math.sqrt(2) then
+          table.insert(self.moves, move)
+        end
+      end
+    end
   end
   
   return king

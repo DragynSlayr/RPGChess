@@ -7,7 +7,21 @@ function Bishop.newBishop(row, column, team)
   bishop.sprite = Sprite.load("pieces/bishop.tga", 78, 126)
   
   function bishop:getMoves()
-    self.moves[#self.moves + 1] = {self.row + 1, self.column + 1}
+    for row = 1, Constants.NUM_ROWS do
+      for col = 1, Constants.NUM_COLUMNS do
+        local move = {}
+        
+        move.row = col
+        move.column = row
+        
+        local x_len = math.abs(self.row - move.row)
+        local y_len = math.abs(self.column - move.column)
+        
+        if x_len == y_len then
+          table.insert(self.moves, move)
+        end
+      end
+    end
   end
   
   return bishop
