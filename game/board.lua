@@ -16,33 +16,33 @@ function Board.fill()
   for col = 2, 7, 5 do
     for row = 1, Constants.NUM_ROWS do
       if col == 2 then
-        Board.pieces[#Board.pieces + 1] = Pawn.newPawn(row, col, Board.player_one_color, 100, 1)
+        Board.pieces[#Board.pieces + 1] = Pawn.newPawn(row, col, 1)
       else 
-        Board.pieces[#Board.pieces + 1] = Pawn.newPawn(row, col, Board.player_two_color, 100, 2)
+        Board.pieces[#Board.pieces + 1] = Pawn.newPawn(row, col, 2)
       end
     end
   end
   
-  Board.pieces[#Board.pieces + 1] = Rook.newRook(1, 1, Board.player_one_color, 100, 1)
-  Board.pieces[#Board.pieces + 1] = Rook.newRook(8, 1, Board.player_one_color, 100, 1)
-  Board.pieces[#Board.pieces + 1] = Rook.newRook(1, 8, Board.player_two_color, 100, 2)
-  Board.pieces[#Board.pieces + 1] = Rook.newRook(8, 8, Board.player_two_color, 100, 2)
+  Board.pieces[#Board.pieces + 1] = Rook.newRook(1, 1, 1)
+  Board.pieces[#Board.pieces + 1] = Rook.newRook(8, 1, 1)
+  Board.pieces[#Board.pieces + 1] = Rook.newRook(1, 8, 2)
+  Board.pieces[#Board.pieces + 1] = Rook.newRook(8, 8, 2)
   
-  Board.pieces[#Board.pieces + 1] = Knight.newKnight(2, 1, Board.player_one_color, 100, 1)
-  Board.pieces[#Board.pieces + 1] = Knight.newKnight(7, 1, Board.player_one_color, 100, 1)
-  Board.pieces[#Board.pieces + 1] = Knight.newKnight(2, 8, Board.player_two_color, 100, 2)
-  Board.pieces[#Board.pieces + 1] = Knight.newKnight(7, 8, Board.player_two_color, 100, 2)
+  Board.pieces[#Board.pieces + 1] = Knight.newKnight(2, 1, 1)
+  Board.pieces[#Board.pieces + 1] = Knight.newKnight(7, 1, 1)
+  Board.pieces[#Board.pieces + 1] = Knight.newKnight(2, 8, 2)
+  Board.pieces[#Board.pieces + 1] = Knight.newKnight(7, 8, 2)
   
-  Board.pieces[#Board.pieces + 1] = Bishop.newBishop(3, 1, Board.player_one_color, 100, 1)
-  Board.pieces[#Board.pieces + 1] = Bishop.newBishop(6, 1, Board.player_one_color, 100, 1)
-  Board.pieces[#Board.pieces + 1] = Bishop.newBishop(3, 8, Board.player_two_color, 100, 2)
-  Board.pieces[#Board.pieces + 1] = Bishop.newBishop(6, 8, Board.player_two_color, 100, 2)
+  Board.pieces[#Board.pieces + 1] = Bishop.newBishop(3, 1, 1)
+  Board.pieces[#Board.pieces + 1] = Bishop.newBishop(6, 1, 1)
+  Board.pieces[#Board.pieces + 1] = Bishop.newBishop(3, 8, 2)
+  Board.pieces[#Board.pieces + 1] = Bishop.newBishop(6, 8, 2)
   
-  Board.pieces[#Board.pieces + 1] = Queen.newQueen(4, 1, Board.player_one_color, 100, 1)
-  Board.pieces[#Board.pieces + 1] = Queen.newQueen(4, 8, Board.player_two_color, 100, 2)
+  Board.pieces[#Board.pieces + 1] = Queen.newQueen(4, 1, 1)
+  Board.pieces[#Board.pieces + 1] = Queen.newQueen(4, 8, 2)
   
-  Board.pieces[#Board.pieces + 1] = King.newKing(5, 1, Board.player_one_color, 100, 1)
-  Board.pieces[#Board.pieces + 1] = King.newKing(5, 8, Board.player_two_color, 100, 2)
+  Board.pieces[#Board.pieces + 1] = King.newKing(5, 1, 1)
+  Board.pieces[#Board.pieces + 1] = King.newKing(5, 8, 2)
 end
 
 function Board.getLocation(x, y)
@@ -59,22 +59,25 @@ function Board.getLocation(x, y)
   end
 end
 
+function Board.checkClick(row, col)
+  for k, piece in pairs(Board.pieces) do 
+    if piece.active then 
+      piece.row = col
+      piece.column = row
+      piece.active = false
+      piece.moves = {}
+    else
+      if piece.row == col and piece.column == row then
+        piece:onClick(1)
+      end
+    end
+  end
+end
+
 function Board.update(dt)
     for k, piece in pairs(Board.pieces) do
       piece:update(dt)
     end
-end
-
-function Board.drawAt(row, column)
-  local j = (Constants.BOARD_ORIGIN_Y + ((row - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))) + (Constants.CELL_HEIGHT / 2)
-  local i = (Constants.BOARD_ORIGIN_X + ((column - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))) + (Constants.CELL_WIDTH / 2)
-  
-  local r, g, b = love.graphics.getColor()
-  love.graphics.setColor(0, 0, 0)
-  
-  love.graphics.circle("fill", i, j, 10)
-  
-  love.graphics.setColor(r, g, b)
 end
 
 function Board.draw()

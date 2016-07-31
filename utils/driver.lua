@@ -1,13 +1,16 @@
 local Driver = {}
 Board = require("game.board")
 
-local row, col = nil, nil
-
 function Driver.mousePressed(x, y, button, is_touch)
-  if debugging then
+  if debugging and button == 1 then
     if Board.getLocation(x, y) ~= nil then
       row, col = Board.getLocation(x, y)
+      Board.checkClick(row, col)
     end
+  end
+  
+  if button == 3 then
+    love.event.quit()
   end
 end
 
@@ -27,9 +30,6 @@ end
 
 function Driver.draw()
   Board.draw()
-  if row and col then
-    Board.drawAt(row, col)
-  end
 end
 
 return Driver
