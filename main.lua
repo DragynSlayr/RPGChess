@@ -1,3 +1,4 @@
+MathHelper = require("utils.mathHelper")
 Constants = require("utils.constants")
 Sprite = require("utils.sprite")
 Driver = require("utils.driver")

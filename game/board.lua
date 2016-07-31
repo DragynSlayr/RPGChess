@@ -61,11 +61,15 @@ end
 
 function Board.checkClick(row, col)
   for k, piece in pairs(Board.pieces) do 
-    if piece.active then 
-      piece.row = col
-      piece.column = row
-      piece.active = false
-      piece.moves = {}
+    if piece.active then
+      for k2, move in pairs(piece.moves) do
+        if move[1] == col and move[2] == row then
+          piece.row = col
+          piece.column = row
+          piece.active = false
+          piece.moves = {}
+        end
+      end
     else
       if piece.row == col and piece.column == row then
         piece:onClick(1)

@@ -36,8 +36,8 @@ function MathHelper.randomSign()
 end
 
 function MathHelper.getDistanceBetween(a, b)
-  local x_dist = a.x - b.x
-  local y_dist = a.y - b.y
+  local x_dist = a.column - b.column
+  local y_dist = a.row - b.row
   
   x_dist = x_dist * x_dist
   y_dist = y_dist * y_dist
