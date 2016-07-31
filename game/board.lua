@@ -70,6 +70,8 @@ function Board.checkClick(row, col)
           piece.moves = {}
         end
       end
+      piece.active = false
+      piece.moves = {}
     else
       if piece.row == col and piece.column == row then
         piece:onClick(1)
