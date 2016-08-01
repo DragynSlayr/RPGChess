@@ -59,30 +59,64 @@ function Board.getLocation(x, y)
   end
 end
 
-function Board.checkClick(row, col)
-  for k, piece in pairs(Board.pieces) do 
-    if piece.active then
-      for k2, move in pairs(piece.moves) do
-        if move.row == col and move.column == row then
-          piece.row = col
-          piece.column = row
-          piece.active = false
-          piece.moves = {}
-          piece.moves_made = piece.moves_made + 1
-          
-          if Board.current_player == 1 then
-            Board.current_player = 2
-          elseif Board.current_player == 2 then
-            Board.current_player = 1
+function Board.checkClick(row, col, button)
+  if button == 1 then
+    if Board.getPieceAt(row, col) ~= nil then
+      if Board.getActiveCount() == 0 then
+        local piece = Board.getPieceAt(row, col)
+        
+        if not piece.active then
+          piece:onClick(Board.current_player)
+        end
+      else
+        for k, piece in pairs(Board.pieces) do
+          for k2, attack in pairs(piece.attacks) do
+            if attack.row == col and attack.column == row then
+              if Board.getPieceAt(row, col) ~= nil then
+                local p = Board.getPieceAt(row, col)
+                p.health = p.health - piece.damage
+                piece.active = false
+                piece.moves = {}
+                piece.attacks = {}
+                piece.moves_made = piece.moves_made + 1
+                
+                if Board.current_player == 1 then
+                  Board.current_player = 2
+                elseif Board.current_player == 2 then
+                  Board.current_player = 1
+                end
+              end
+            end
           end
         end
       end
+    else
+      for k, piece in pairs(Board.pieces) do
+        for k2, move in pairs(piece.moves) do
+          if move.row == col and move.column == row then
+            piece.row = col
+            piece.column = row
+            piece.active = false
+            piece.moves = {}
+            piece.attacks = {}
+            piece.moves_made = piece.moves_made + 1
+            
+            if Board.current_player == 1 then
+              Board.current_player = 2
+            elseif Board.current_player == 2 then
+              Board.current_player = 1
+            end
+          end
+        end
+      end
+    end
+  elseif button == 2 then
+    if Board.getPieceAt(row, col) ~= nil then
+      local piece = Board.getPieceAt(row, col)
+      
       piece.active = false
       piece.moves = {}
-    else
-      if piece.row == col and piece.column == row then
-        piece:onClick(Board.current_player)
-      end
+      piece.attacks = {}
     end
   end
 end
@@ -95,6 +129,17 @@ function Board.getPieceAt(row, column)
   end
 end
 
+function Board.getActiveCount()
+  local num = 0
+  for k, piece in pairs(Board.pieces) do
+    if piece.active then
+      num = num + 1
+    end
+  end
+  
+  return num
+end
+
 function Board.update(dt)
     for k, piece in pairs(Board.pieces) do
       piece:update(dt)
@@ -104,20 +149,20 @@ end
 function Board.draw()
   Sprite.draw(Board.sprite, Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2)
   
-  local r, g, b = love.graphics.getColor()
-  love.graphics.setColor(0, 0, 0)
-  
-  for i = 1, Constants.NUM_COLUMNS do
-    for j = 1, Constants.NUM_ROWS do
-      love.graphics.print(string.format("(%d, %d)", j, i), Constants.BOARD_ORIGIN_X + ((i - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE)), Constants.BOARD_ORIGIN_Y + ((j - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE)))
-    end
-  end
-  
   for k, piece in pairs(Board.pieces) do 
     piece:draw()
   end
   
-  love.graphics.setColor(r, g, b)
+  local r, g, b, a = love.graphics.getColor()
+  love.graphics.setColor(255, 255, 255, 127)
+  
+  if Board.current_player == 1 then
+    love.graphics.rectangle("fill", 0, 0, 420, 420)
+  elseif Board.current_player == 2 then
+    love.graphics.rectangle("fill", 1500, 0, 420, 420)
+  end
+  
+  love.graphics.setColor(r, g, b, a)
 end
 
 return Board

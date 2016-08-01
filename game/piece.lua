@@ -10,12 +10,14 @@ Rook = require("pieces.rook")
 function Piece.newPiece(row, column, team)
   local piece = {}
   piece.moves = {}
+  piece.attacks = {}
   
   piece.row = column
   piece.column = row
   
   piece.team = team
   piece.active = false
+  piece.alive = true
   piece.moves_made = 0
   
   piece.forward_x = 1
@@ -31,8 +33,20 @@ function Piece.newPiece(row, column, team)
   end
   
   function piece:update(dt)
-    self.x = Constants.BOARD_ORIGIN_X + ((self.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE)) + (Constants.CELL_WIDTH / 2)
-    self.y = Constants.BOARD_ORIGIN_Y + ((self.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE)) + (Constants.CELL_HEIGHT / 2)
+    if self.alive then
+      self.x = Constants.BOARD_ORIGIN_X + ((self.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE)) + (Constants.CELL_WIDTH / 2)
+      self.y = Constants.BOARD_ORIGIN_Y + ((self.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE)) + (Constants.CELL_HEIGHT / 2)
+      
+      if self.health <= 0 then
+        self.alive = false
+      end
+    else
+      for k, piece in pairs(Board.pieces) do
+        if self == piece then
+          table.remove(Board.pieces, k)
+        end
+      end
+    end
   end
   
   function piece:draw()
@@ -49,11 +63,18 @@ function Piece.newPiece(row, column, team)
     
     Sprite.draw(self.sprite, self.x, self.y)
     
-    love.graphics.setColor(255, 255, 255, 127)
     if self.active then
+      love.graphics.setColor(0, 0, 255, 127)
       for k, move in pairs(self.moves) do
         local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
         local y = Constants.BOARD_ORIGIN_Y + ((move.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
+      end
+      
+      love.graphics.setColor(255, 0, 0, 127)
+      for k, attack in pairs(self.attacks) do
+        local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
+        local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
     end

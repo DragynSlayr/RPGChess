@@ -4,6 +4,7 @@ function Knight.newKnight(row, column, team)
   local knight = Piece.newPiece(row, column, team)
   
   knight.health = 100
+  knight.damage = 100
   knight.sprite = Sprite.load("pieces/knight.tga", 72, 126)
   
   function knight:getMoves()
