@@ -14,7 +14,7 @@ function Rook.newRook(row, column, team)
         move.row = col
         move.column = row
         
-        if self.row == move.row or self.column == move.column then
+        if (self.row == move.row or self.column == move.column) and Board.getPieceAt(move.column, move.row) == nil then
           table.insert(self.moves, move)
         end
       end

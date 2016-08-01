@@ -81,6 +81,14 @@ function Board.checkClick(row, col)
   end
 end
 
+function Board.getPieceAt(row, column)
+  for k, piece in pairs(Board.pieces) do
+    if piece.row == column and piece.column == row then
+      return piece
+    end
+  end
+end
+
 function Board.update(dt)
     for k, piece in pairs(Board.pieces) do
       piece:update(dt)

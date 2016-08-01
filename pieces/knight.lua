@@ -14,7 +14,7 @@ function Knight.newKnight(row, column, team)
         move.row = col
         move.column = row
         
-        if MathHelper.getDistanceBetween(self, move) == math.sqrt(5) then
+        if MathHelper.getDistanceBetween(self, move) == math.sqrt(5) and Board.getPieceAt(move.column, move.row) == nil then
           table.insert(self.moves, move)
         end
       end
