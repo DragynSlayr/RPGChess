@@ -62,7 +62,9 @@ function Piece.newPiece(row, column, team)
   end
   
   function piece:onClick(player)
-    self.active = not self.active
+    if player == self.team then
+      self.active = not self.active
+    end
     
     for k, p in pairs(Board.pieces) do 
       if p ~= self then

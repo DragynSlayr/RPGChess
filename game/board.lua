@@ -69,13 +69,19 @@ function Board.checkClick(row, col)
           piece.active = false
           piece.moves = {}
           piece.moves_made = piece.moves_made + 1
+          
+          if Board.current_player == 1 then
+            Board.current_player = 2
+          elseif Board.current_player == 2 then
+            Board.current_player = 1
+          end
         end
       end
       piece.active = false
       piece.moves = {}
     else
       if piece.row == col and piece.column == row then
-        piece:onClick(1)
+        piece:onClick(Board.current_player)
       end
     end
   end

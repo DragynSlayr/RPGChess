@@ -1,6 +1,8 @@
 local Driver = {}
 Board = require("game.board")
 
+Board.current_player = 1
+
 function Driver.mousePressed(x, y, button, is_touch)
   if debugging and button == 1 then
     if Board.getLocation(x, y) ~= nil then
