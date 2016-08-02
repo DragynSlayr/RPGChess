@@ -74,16 +74,18 @@ function Board.checkClick(row, col, button)
             if attack.row == col and attack.column == row then
               if Board.getPieceAt(row, col) ~= nil then
                 local p = Board.getPieceAt(row, col)
-                p.health = p.health - piece.damage
-                piece.active = false
-                piece.moves = {}
-                piece.attacks = {}
-                piece.moves_made = piece.moves_made + 1
-                
-                if Board.current_player == 1 then
-                  Board.current_player = 2
-                elseif Board.current_player == 2 then
-                  Board.current_player = 1
+                if p.team ~= piece.team then
+                  p.health = p.health - piece.damage
+                  piece.active = false
+                  piece.moves = {}
+                  piece.attacks = {}
+                  piece.moves_made = piece.moves_made + 1
+                  
+                  if Board.current_player == 1 then
+                    Board.current_player = 2
+                  elseif Board.current_player == 2 then
+                    Board.current_player = 1
+                  end
                 end
               end
             end

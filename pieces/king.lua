@@ -17,8 +17,11 @@ function King.newKing(row, column, team)
         
         local dist = MathHelper.getDistanceBetween(self, move)
         
-        if (dist == 1 or dist == math.sqrt(2)) and Board.getPieceAt(move.column, move.row) == nil then
-          table.insert(self.moves, move)
+        if (dist == 1 or dist == math.sqrt(2)) then
+          if Board.getPieceAt(move.column, move.row) == nil then
+            table.insert(self.moves, move)
+          end
+          table.insert(self.attacks, move)
         end
       end
     end

@@ -18,8 +18,11 @@ function Bishop.newBishop(row, column, team)
         local x_len = math.abs(self.row - move.row)
         local y_len = math.abs(self.column - move.column)
         
-        if (x_len == y_len) and Board.getPieceAt(move.column, move.row) == nil then
-          table.insert(self.moves, move)
+        if (x_len == y_len) then
+          if Board.getPieceAt(move.column, move.row) == nil then
+            table.insert(self.moves, move)
+          end
+          table.insert(self.attacks, move)
         end
       end
     end

@@ -21,8 +21,11 @@ function Queen.newQueen(row, column, team)
         local row_same = self.row == move.row
         local col_same = self.column == move.column
         
-        if (x_len == y_len or row_same or col_same) and Board.getPieceAt(move.column, move.row) == nil then
-          table.insert(self.moves, move)
+        if (x_len == y_len or row_same or col_same) then
+          if Board.getPieceAt(move.column, move.row) == nil then
+            table.insert(self.moves, move)
+          end
+          table.insert(self.attacks, move)
         end
       end
     end
