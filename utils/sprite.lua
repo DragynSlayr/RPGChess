@@ -27,6 +27,9 @@ function Sprite.load(path, width, height)
   function sprite:setScale(x_scale, y_scale)
     self.x_scale = x_scale
     self.y_scale = y_scale
+    
+    self.scaled_width = self.width * self.x_scale
+    self.scaled_height = self.height * self.y_scale
   end
   
   function sprite:setAnimation(delay)
