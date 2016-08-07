@@ -2,14 +2,15 @@ local Board = {}
 Piece = require("game.piece")
 
 function Board.load()
-  Board.pieces = {}
+  Board.sprite = Sprite.load("background/board.tga", 1080, 1080)
+  Board.turn_indicator = Sprite.load("background/turn.tga", 210, 106)
+  Board.turn_indicator:setScale(2, 1.5)
   
   Board.player_one_color = {255, 0, 0}
   Board.player_two_color = {0, 0, 255}
   
+  Board.pieces = {}
   Board.fill()
-  
-  Board.sprite = Sprite.load("background/board.tga", 1080, 1080)
 end
 
 function Board.fill()
@@ -76,6 +77,10 @@ function Board.checkClick(row, col, button)
                 local p = Board.getPieceAt(row, col)
                 if p.team ~= piece.team then
                   p.health = p.health - piece.damage
+                  if p.health <= 0 then
+                    piece.row = p.row
+                    piece.column = p.column
+                  end
                   piece.active = false
                   piece.moves = {}
                   piece.attacks = {}
@@ -159,9 +164,11 @@ function Board.draw()
   love.graphics.setColor(255, 255, 255, 127)
   
   if Board.current_player == 1 then
-    love.graphics.rectangle("fill", 0, 0, 420, 420)
+    Sprite.draw(Board.turn_indicator, ((Constants.SCREEN_WIDTH - Constants.BOARD_WIDTH) / 4), Constants.SCREEN_HEIGHT / 2)
+    --love.graphics.rectangle("fill", 0, 0, 420, 420)
   elseif Board.current_player == 2 then
-    love.graphics.rectangle("fill", 1500, 0, 420, 420)
+    Sprite.draw(Board.turn_indicator, Constants.SCREEN_WIDTH - ((Constants.SCREEN_WIDTH - Constants.BOARD_WIDTH) / 4), Constants.SCREEN_HEIGHT / 2)
+    --love.graphics.rectangle("fill", 1500, 0, 420, 420)
   end
   
   love.graphics.setColor(r, g, b, a)

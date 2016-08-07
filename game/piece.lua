@@ -71,12 +71,12 @@ function Piece.newPiece(row, column, team)
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
       
-      love.graphics.setColor(255, 0, 0, 127)
-      for k, attack in pairs(self.attacks) do
-        local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
-        local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
-        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
-      end
+      --love.graphics.setColor(255, 0, 0, 127)
+      --for k, attack in pairs(self.attacks) do
+      --  local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
+      --  local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+      --  love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
+      --end
     end
     
     love.graphics.setColor(r, g, b, a)
