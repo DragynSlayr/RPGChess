@@ -6,6 +6,7 @@ function King.newKing(row, column, team)
   king.health = 100
   king.damage = 100
   king.sprite = Sprite.load("pieces/king.tga", 100, 126)
+  king.type = "King"
   
   function king:getMoves()
     for row = 1, Constants.NUM_ROWS do
@@ -25,6 +26,7 @@ function King.newKing(row, column, team)
         end
       end
     end
+    self:filter()
   end
   
   return king

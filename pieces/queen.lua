@@ -6,6 +6,7 @@ function Queen.newQueen(row, column, team)
   queen.health = 100
   queen.damage = 100
   queen.sprite = Sprite.load("pieces/queen.tga", 62, 126)
+  queen.type = "Queen"
   
   function queen:getMoves()
     for row = 1, Constants.NUM_ROWS do
@@ -29,6 +30,7 @@ function Queen.newQueen(row, column, team)
         end
       end
     end
+    self:filter()
   end
   
   return queen

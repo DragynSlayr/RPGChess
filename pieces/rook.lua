@@ -6,6 +6,7 @@ function Rook.newRook(row, column, team)
   rook.health = 100
   rook.damage = 100
   rook.sprite = Sprite.load("pieces/rook.tga", 72, 126)
+  rook.type = "Rook"
   
   function rook:getMoves()
     for row = 1, Constants.NUM_ROWS do
@@ -23,6 +24,7 @@ function Rook.newRook(row, column, team)
         end
       end
     end
+    self:filter()
   end
   
   return rook

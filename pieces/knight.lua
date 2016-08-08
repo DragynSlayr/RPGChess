@@ -6,6 +6,7 @@ function Knight.newKnight(row, column, team)
   knight.health = 100
   knight.damage = 100
   knight.sprite = Sprite.load("pieces/knight.tga", 72, 126)
+  knight.type = "Knight"
   
   function knight:getMoves()
     for row = 1, Constants.NUM_ROWS do
@@ -23,6 +24,7 @@ function Knight.newKnight(row, column, team)
         end
       end
     end
+    self:filter()
   end
   
   return knight

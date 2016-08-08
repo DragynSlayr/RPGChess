@@ -6,6 +6,7 @@ function Pawn.newPawn(row, column, team)
   pawn.health = 100
   pawn.damage = 100
   pawn.sprite = Sprite.load("pieces/pawn.tga", 101, 126)
+  pawn.type = "Pawn"
   
   function pawn:getMoves()    
     local move = {}

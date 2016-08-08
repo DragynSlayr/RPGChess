@@ -60,7 +60,7 @@ function Piece.newPiece(row, column, team)
     
     love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y - (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
     love.graphics.setColor(255, 255, 255, 127)
-    
+
     Sprite.draw(self.sprite, self.x, self.y)
     
     if self.active then
@@ -71,12 +71,12 @@ function Piece.newPiece(row, column, team)
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
       
-      --love.graphics.setColor(255, 0, 0, 127)
-      --for k, attack in pairs(self.attacks) do
-      --  local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
-      --  local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
-      --  love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
-      --end
+      love.graphics.setColor(255, 0, 0, 127)
+      for k, attack in pairs(self.attacks) do
+        local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
+        local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
+      end
     end
     
     love.graphics.setColor(r, g, b, a)
@@ -100,6 +100,27 @@ function Piece.newPiece(row, column, team)
       self.moves = {}
     end
   end
+  
+  function piece:filter()
+    for i = 1, #self.moves do
+      local move = self.moves[i]
+      if Board.getPieceAt(move.column, move.row) then
+        self.moves[i] = nil
+      end
+    end
+    
+    for i = 1, #self.attacks do
+      local attack = self.attacks[i]
+      if Board.getPieceAt(attack.column, attack.row) then
+        local p = Board.getPieceAt(attack.column, attack.row)
+        if p.team == self.team then
+          self.attacks[i] = nil
+        end
+      end
+    end
+  end
+  
+  setmetatable(piece, {__tostring = function(t) return string.format("R: %d, C: %d, T: %d, P: %s", t.column, t.row, t.team, t.type) end})
   
   return piece
 end

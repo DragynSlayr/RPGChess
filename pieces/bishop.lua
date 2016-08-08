@@ -6,6 +6,7 @@ function Bishop.newBishop(row, column, team)
   bishop.health = 100
   bishop.damage = 100
   bishop.sprite = Sprite.load("pieces/bishop.tga", 78, 126)
+  bishop.type = "Bishop"
   
   function bishop:getMoves()
     for row = 1, Constants.NUM_ROWS do
@@ -26,6 +27,7 @@ function Bishop.newBishop(row, column, team)
         end
       end
     end
+    self:filter()
   end
   
   return bishop
