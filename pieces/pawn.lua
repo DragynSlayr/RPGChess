@@ -3,8 +3,10 @@ local Pawn = {}
 function Pawn.newPawn(row, column, team)
   local pawn = Piece.newPiece(row, column, team)
   
-  pawn.health = 100
-  pawn.damage = 100
+  pawn.max_health = 100
+  pawn.health = pawn.max_health
+  pawn.damage = 25
+  
   pawn.sprite = Sprite.load("pieces/pawn.tga", 101, 126)
   pawn.type = "Pawn"
   
@@ -36,6 +38,8 @@ function Pawn.newPawn(row, column, team)
     attack.column = self.column + 1
     
     table.insert(self.attacks, attack)
+    
+    self:filter()
   end
   
   return pawn

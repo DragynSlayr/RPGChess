@@ -3,8 +3,10 @@ local Bishop = {}
 function Bishop.newBishop(row, column, team)
   local bishop = Piece.newPiece(row, column, team)
   
-  bishop.health = 100
-  bishop.damage = 100
+  bishop.max_health = 125
+  bishop.health = bishop.max_health
+  bishop.damage = 60
+  
   bishop.sprite = Sprite.load("pieces/bishop.tga", 78, 126)
   bishop.type = "Bishop"
   

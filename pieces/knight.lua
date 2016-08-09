@@ -3,8 +3,10 @@ local Knight = {}
 function Knight.newKnight(row, column, team)
   local knight = Piece.newPiece(row, column, team)
   
-  knight.health = 100
-  knight.damage = 100
+  knight.max_health = 175
+  knight.health = knight.max_health
+  knight.damage = 125
+  
   knight.sprite = Sprite.load("pieces/knight.tga", 72, 126)
   knight.type = "Knight"
   

@@ -58,20 +58,20 @@ function Piece.newPiece(row, column, team)
       love.graphics.setColor(self.color[1], self.color[2], self.color[3], 100)
     end
     
-    love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y - (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
-    love.graphics.setColor(255, 255, 255, 127)
-
+    love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y + (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, -Constants.CELL_HEIGHT / (self.max_health / self.health))
+    
+    love.graphics.setColor(r, g, b, 255)
     Sprite.draw(self.sprite, self.x, self.y)
     
     if self.active then
-      love.graphics.setColor(0, 0, 255, 127)
+      love.graphics.setColor(self.color[1], self.color[2], self.color[3], 100)
+      
       for k, move in pairs(self.moves) do
         local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
         local y = Constants.BOARD_ORIGIN_Y + ((move.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
       
-      love.graphics.setColor(255, 0, 0, 127)
       for k, attack in pairs(self.attacks) do
         local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
         local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
@@ -111,11 +111,13 @@ function Piece.newPiece(row, column, team)
     
     for i = 1, #self.attacks do
       local attack = self.attacks[i]
-      if Board.getPieceAt(attack.column, attack.row) then
+      if Board.getPieceAt(attack.column, attack.row) ~= nil then
         local p = Board.getPieceAt(attack.column, attack.row)
         if p.team == self.team then
           self.attacks[i] = nil
         end
+      else
+        self.attacks[i] = nil
       end
     end
   end

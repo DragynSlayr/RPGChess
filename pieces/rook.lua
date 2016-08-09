@@ -3,8 +3,10 @@ local Rook = {}
 function Rook.newRook(row, column, team)
   local rook = Piece.newPiece(row, column, team)
   
-  rook.health = 100
-  rook.damage = 100
+  rook.max_health = 200
+  rook.health = rook.max_health
+  rook.damage = 75
+  
   rook.sprite = Sprite.load("pieces/rook.tga", 72, 126)
   rook.type = "Rook"
   
