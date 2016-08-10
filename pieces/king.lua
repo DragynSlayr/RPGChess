@@ -28,6 +28,7 @@ function King.newKing(row, column, team)
         end
       end
     end
+    
     self:filter()
   end
   

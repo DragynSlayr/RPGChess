@@ -24,6 +24,8 @@ function Queen.newQueen(row, column, team)
         local row_same = self.row == move.row
         local col_same = self.column == move.column
         
+        setmetatable(move, {__tostring = function(t) return string.format("R: %d, C: %d", t.column, t.row) end})
+        
         if (x_len == y_len or row_same or col_same) then
           if Board.getPieceAt(move.column, move.row) == nil then
             table.insert(self.moves, move)
@@ -32,7 +34,8 @@ function Queen.newQueen(row, column, team)
         end
       end
     end
-    self:filter()
+    
+    self:filter(true)
   end
   
   return queen

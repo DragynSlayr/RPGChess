@@ -161,14 +161,16 @@ function Board.draw()
   end
   
   local r, g, b, a = love.graphics.getColor()
-  love.graphics.setColor(255, 255, 255, 127)
+  --love.graphics.setColor(255, 255, 255, 255)
+  
+  local x, y = ((Constants.SCREEN_WIDTH - Constants.BOARD_WIDTH) / 4), (Constants.SCREEN_HEIGHT / 2)
   
   if Board.current_player == 1 then
-    Sprite.draw(Board.turn_indicator, ((Constants.SCREEN_WIDTH - Constants.BOARD_WIDTH) / 4), Constants.SCREEN_HEIGHT / 2)
-    --love.graphics.rectangle("fill", 0, 0, 420, 420)
+    love.graphics.setColor(255, 127, 0, 255)
+    Sprite.draw(Board.turn_indicator, x, y)
   elseif Board.current_player == 2 then
-    Sprite.draw(Board.turn_indicator, Constants.SCREEN_WIDTH - ((Constants.SCREEN_WIDTH - Constants.BOARD_WIDTH) / 4), Constants.SCREEN_HEIGHT / 2)
-    --love.graphics.rectangle("fill", 1500, 0, 420, 420)
+    love.graphics.setColor(0, 127, 255, 255)
+    Sprite.draw(Board.turn_indicator, Constants.SCREEN_WIDTH - x, y)
   end
   
   love.graphics.setColor(r, g, b, a)

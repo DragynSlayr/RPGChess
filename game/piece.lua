@@ -55,12 +55,13 @@ function Piece.newPiece(row, column, team)
     if self.active then
       love.graphics.setColor(0, 255, 0, 100)
     else
-      love.graphics.setColor(self.color[1], self.color[2], self.color[3], 100)
+      love.graphics.setColor(self.color[1], self.color[2], self.color[3], 50)
     end
     
     love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y + (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, -Constants.CELL_HEIGHT / (self.max_health / self.health))
     
-    love.graphics.setColor(r, g, b, 255)
+    --love.graphics.setColor(r, g, b, 255)
+    love.graphics.setColor(self.color[1], 127, self.color[3], 255)
     Sprite.draw(self.sprite, self.x, self.y)
     
     if self.active then
@@ -101,7 +102,7 @@ function Piece.newPiece(row, column, team)
     end
   end
   
-  function piece:filter()
+  function piece:filter(advanced)
     for i = 1, #self.moves do
       local move = self.moves[i]
       if Board.getPieceAt(move.column, move.row) then
@@ -119,6 +120,39 @@ function Piece.newPiece(row, column, team)
       else
         self.attacks[i] = nil
       end
+    end
+    
+    if advanced then
+      --[[
+      for i = 1, #self.moves do
+        local move = self.moves[i]
+        for j = 1, #Board.pieces do
+          local piece = Board.pieces[j]
+          if piece and move and piece ~= self then
+            if MathHelper.blockingLine(self, move, piece) then
+              self.moves[i] = nil
+              break
+            end
+          end
+        end
+      end
+      ]]--
+      
+      --[[
+      for i = 1, #self.attacks do
+        local attack = self.attacks[i]
+        for j = 1, #Board.pieces do
+          local piece = Board.pieces[j]
+          if piece ~= self then
+            if piece and attack then
+                if MathHelper.blockingLine(self, attack, piece) then
+                  self.attacks[i] = nil
+                end
+            end
+          end
+        end
+      end
+      ]]--
     end
   end
   

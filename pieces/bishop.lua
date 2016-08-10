@@ -29,7 +29,8 @@ function Bishop.newBishop(row, column, team)
         end
       end
     end
-    self:filter()
+    
+    self:filter(true)
   end
   
   return bishop

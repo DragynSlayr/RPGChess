@@ -26,6 +26,7 @@ function Knight.newKnight(row, column, team)
         end
       end
     end
+    
     self:filter()
   end
   
