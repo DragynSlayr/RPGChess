@@ -75,18 +75,6 @@ function MathHelper.getRandomUnitStart(rad)
   return x, y
 end
 
-function MathHelper.isMultipleOf(a, b)
-  local quotient = a / b
-  return math.ceil(quotient) == math.floor(quotient)
-end
-
-function MathHelper.blockingLine(a, b, block)
-  local ab = MathHelper.getDistanceBetween(a, block)
-  local bc = MathHelper.getDistanceBetween(block, b)
-  local ac = MathHelper.getDistanceBetween(a, b)
-  return ab + bc == ac--(ab + bc <= ac * 1.1) or (ab + bc >= ac * 0.9)
-end
-
 MathHelper.load()
 
 return MathHelper

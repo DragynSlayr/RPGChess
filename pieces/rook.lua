@@ -3,31 +3,23 @@ local Rook = {}
 function Rook.newRook(row, column, team)
   local rook = Piece.newPiece(row, column, team)
   
-  rook.max_health = 200
+  rook.max_health = 400
   rook.health = rook.max_health
-  rook.damage = 75
+  rook.damage = 400
   
   rook.sprite = Sprite.load("pieces/rook.tga", 72, 126)
   rook.type = "Rook"
   
-  function rook:getMoves()
-    for row = 1, Constants.NUM_ROWS do
-      for col = 1, Constants.NUM_COLUMNS do
-        local move = {}
-        
-        move.row = col
-        move.column = row
-        
-        if (self.row == move.row or self.column == move.column) then
-          if Board.getPieceAt(move.column, move.row) == nil then
-            table.insert(self.moves, move)
-          end
-          table.insert(self.attacks, move)
-        end
-      end
-    end
+  function rook:populateMoveSet()
+    self:getMoveLine(1, 0)
+    self:getMoveLine(-1, 0)
+    self:getMoveLine(0, 1)
+    self:getMoveLine(0, -1)
     
-    self:filter(true)
+    self:getAttackLine(1, 0)
+    self:getAttackLine(-1, 0)
+    self:getAttackLine(0, 1)
+    self:getAttackLine(0, -1)
   end
   
   return rook

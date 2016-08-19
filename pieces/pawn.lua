@@ -5,41 +5,53 @@ function Pawn.newPawn(row, column, team)
   
   pawn.max_health = 100
   pawn.health = pawn.max_health
-  pawn.damage = 25
+  pawn.damage = 100
   
   pawn.sprite = Sprite.load("pieces/pawn.tga", 101, 126)
   pawn.type = "Pawn"
   
   function pawn:getMoves()    
     local move = {}
+    
     move.row = self.row + (1 * self.forward_x)
     move.column = self.column
     
-    if Board.getPieceAt(move.column, move.row) == nil then
-      table.insert(self.moves, move)
+    if PieceHelper.movePossible(move) then
+      self.moves[#self.moves + 1] = move
       
       if self.moves_made == 0 then
-        local move = {}
+        move = {}
+        
         move.row = self.row + (2 * self.forward_x)
         move.column = self.column
         
-        table.insert(self.moves, move)
+        if PieceHelper.movePossible(move) then
+          self.moves[#self.moves + 1] = move
+        end
       end
     end
-    
+  end
+  
+  function pawn:getAttacks()
     local attack = {}
-    attack.row = self.row + (1 * self.forward_x)
-    attack.column = self.column - 1
+    local attacks = {}
     
-    table.insert(self.attacks, attack)
-    
-    attack = {}
     attack.row = self.row + (1 * self.forward_x)
     attack.column = self.column + 1
     
-    table.insert(self.attacks, attack)
+    attacks[#attacks + 1] = attack
     
-    self:filter()
+    attack = {}
+    attack.row = self.row + (1 * self.forward_x)
+    attack.column = self.column - 1
+    
+    attacks[#attacks + 1] = attack
+    
+    for i = 1, #attacks do
+      if PieceHelper.attackPossible(self, attacks[i]) then
+        self.attacks[#self.attacks + 1] = attacks[i]
+      end
+    end
   end
   
   return pawn

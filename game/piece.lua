@@ -1,5 +1,6 @@
 local Piece = {}
 
+PieceHelper = require("utils.pieceHelper")
 Bishop = require("pieces.bishop")
 King = require("pieces.king")
 Knight = require("pieces.knight")
@@ -60,12 +61,8 @@ function Piece.newPiece(row, column, team)
     
     love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y + (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, -Constants.CELL_HEIGHT / (self.max_health / self.health))
     
-    --love.graphics.setColor(r, g, b, 255)
-    love.graphics.setColor(self.color[1], 127, self.color[3], 255)
-    Sprite.draw(self.sprite, self.x, self.y)
-    
     if self.active then
-      love.graphics.setColor(self.color[1], self.color[2], self.color[3], 100)
+      love.graphics.setColor(self.color[1], 255, self.color[3], 100)
       
       for k, move in pairs(self.moves) do
         local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
@@ -73,12 +70,17 @@ function Piece.newPiece(row, column, team)
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
       
+      love.graphics.setColor(self.color[1], 50, self.color[3], 200)
+      
       for k, attack in pairs(self.attacks) do
         local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
         local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
     end
+    
+    love.graphics.setColor(self.color[1], 127, self.color[3], 255)
+    Sprite.draw(self.sprite, self.x, self.y)
     
     love.graphics.setColor(r, g, b, a)
   end
@@ -96,63 +98,54 @@ function Piece.newPiece(row, column, team)
     end
     
     if self.active then
-      self:getMoves()
+      self:populateMoveSet()
     else
       self.moves = {}
     end
   end
   
-  function piece:filter(advanced)
-    for i = 1, #self.moves do
-      local move = self.moves[i]
-      if Board.getPieceAt(move.column, move.row) then
-        self.moves[i] = nil
-      end
-    end
+  function piece:populateMoveSet()
+    self:getMoves()
+    self:getAttacks()
+  end
+  
+  function piece:getMoveLine(x, y)
+    local i = 1
     
-    for i = 1, #self.attacks do
-      local attack = self.attacks[i]
-      if Board.getPieceAt(attack.column, attack.row) ~= nil then
-        local p = Board.getPieceAt(attack.column, attack.row)
-        if p.team == self.team then
-          self.attacks[i] = nil
-        end
-      else
-        self.attacks[i] = nil
-      end
-    end
-    
-    if advanced then
-      --[[
-      for i = 1, #self.moves do
-        local move = self.moves[i]
-        for j = 1, #Board.pieces do
-          local piece = Board.pieces[j]
-          if piece and move and piece ~= self then
-            if MathHelper.blockingLine(self, move, piece) then
-              self.moves[i] = nil
-              break
-            end
-          end
-        end
-      end
-      ]]--
+    while true do
+      local move = {}
       
-      --[[
-      for i = 1, #self.attacks do
-        local attack = self.attacks[i]
-        for j = 1, #Board.pieces do
-          local piece = Board.pieces[j]
-          if piece ~= self then
-            if piece and attack then
-                if MathHelper.blockingLine(self, attack, piece) then
-                  self.attacks[i] = nil
-                end
-            end
-          end
+      move.row = self.row + (i * (self.forward_x * y))
+      move.column = self.column - (i * x)
+      
+      if PieceHelper.movePossible(move) then
+        self.moves[#self.moves + 1] = move
+        i = i + 1
+      else 
+        break
+      end
+    end
+  end
+  
+  function piece:getAttackLine(x, y)
+    local i = 1
+    
+    while true do
+      local attack = {}
+      
+      attack.row = self.row + (i * (self.forward_x * y))
+      attack.column = self.column - (i * x)
+      
+      if PieceHelper.attackPossible(self, attack) then
+        self.attacks[#self.attacks + 1] = attack
+        break
+      else
+        if PieceHelper.movePossible(attack) then
+          i = i + 1
+        else
+          break
         end
       end
-      ]]--
     end
   end
   
