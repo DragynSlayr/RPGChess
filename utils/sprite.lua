@@ -39,6 +39,12 @@ function Sprite.load(path, width, height)
     self.current_frame = 1
   end
   
+  function sprite:setRotation(angle)
+    self.rotating = true
+    self.angle = angle
+    self.rotation = 0
+  end
+  
   function sprite:update(dt)
     if self.animated then
       self.time = self.time + dt
@@ -53,6 +59,9 @@ function Sprite.load(path, width, height)
         end
       end
     end
+    if self.rotating then
+      self.rotation = self.rotation + self.angle
+    end
   end
   
   return sprite
@@ -60,7 +69,7 @@ end
 
 function Sprite.draw(sprite, x, y)
   if sprite.animated then
-    love.graphics.draw(sprite.image, sprite.sprites[sprite.current_frame], x, y, 0, sprite.x_scale, sprite.y_scale, sprite.width / 2, sprite.height / 2)
+    love.graphics.draw(sprite.image, sprite.sprites[sprite.current_frame], x, y, sprite.rotation or 0, sprite.x_scale, sprite.y_scale, sprite.width / 2, sprite.height / 2)
   else
     love.graphics.draw(sprite.image, sprite.sprites[1], x, y, 0, sprite.x_scale, sprite.y_scale, sprite.width / 2, sprite.height / 2)
   end

@@ -152,6 +152,8 @@ function Board.update(dt)
     for k, piece in pairs(Board.pieces) do
       piece:update(dt)
     end
+    Piece.available_sprite:update(dt)
+    Piece.selected_sprite:update(dt)
 end
 
 function Board.draw()
@@ -161,6 +163,7 @@ function Board.draw()
     piece:draw()
   end
   
+  --[[
   local r, g, b, a = love.graphics.getColor()
   --love.graphics.setColor(255, 255, 255, 255)
   
@@ -168,13 +171,14 @@ function Board.draw()
   
   if Board.current_player == 1 then
     love.graphics.setColor(255, 127, 0, 255)
-    Sprite.draw(Board.turn_indicator, x, y)
+    --Sprite.draw(Board.turn_indicator, x, y)
   elseif Board.current_player == 2 then
     love.graphics.setColor(0, 127, 255, 255)
-    Sprite.draw(Board.turn_indicator, Constants.SCREEN_WIDTH - x, y)
+    --Sprite.draw(Board.turn_indicator, Constants.SCREEN_WIDTH - x, y)
   end
   
   love.graphics.setColor(r, g, b, a)
+  ]]
 end
 
 return Board

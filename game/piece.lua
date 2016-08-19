@@ -8,6 +8,14 @@ Pawn = require("pieces.pawn")
 Queen = require("pieces.queen")
 Rook = require("pieces.rook")
 
+Piece.available_sprite = Sprite.load("background/available.tga", 126, 126)
+Piece.available_sprite:setAnimation(0)
+Piece.available_sprite:setRotation(math.pi / 180)
+
+Piece.selected_sprite = Sprite.load("background/selected.tga", 126, 126)
+Piece.selected_sprite:setAnimation(0.8)
+Piece.selected_sprite:setRotation(-math.pi / 120)
+
 function Piece.newPiece(row, column, team)
   local piece = {}
   piece.moves = {}
@@ -62,6 +70,9 @@ function Piece.newPiece(row, column, team)
     love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y + (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, -Constants.CELL_HEIGHT / (self.max_health / self.health))
     
     if self.active then
+      love.graphics.setColor(self.color[1], 127, self.color[3], 127)
+      Sprite.draw(Piece.selected_sprite, self.x, self.y)
+      
       love.graphics.setColor(self.color[1], 255, self.color[3], 100)
       
       for k, move in pairs(self.moves) do
@@ -77,6 +88,9 @@ function Piece.newPiece(row, column, team)
         local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
+    elseif (Board.current_player == self.team) then
+      love.graphics.setColor(self.color[1], 127, self.color[3], 127)
+      Sprite.draw(Piece.available_sprite, self.x, self.y)
     end
     
     love.graphics.setColor(self.color[1], 127, self.color[3], 255)
