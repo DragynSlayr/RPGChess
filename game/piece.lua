@@ -149,6 +149,21 @@ function Piece.newPiece(row, column, team)
     end
   end
   
+  function piece:onDeath()
+    if (self.type == "King") then
+      State.current = State.game_over
+      local s = "\n"
+      
+      if (self.team == 1) then
+        s = s .. "Blue Team Wins!"
+      else
+        s = s .. "Red Team Wins!"
+      end
+      
+      Driver.end_string = Driver.end_string .. s
+    end
+  end
+  
   setmetatable(piece, {__tostring = function(t) return string.format("R: %d, C: %d, T: %d, P: %s", t.column, t.row, t.team, t.type) end})
   
   return piece

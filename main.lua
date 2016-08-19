@@ -17,4 +17,5 @@ love.update = Driver.update
 love.draw = Driver.draw
 
 --Change background color
-love.graphics.setBackgroundColor(200, 188, 146)
+--love.graphics.setBackgroundColor(200, 188, 146)
+love.graphics.setBackgroundColor(200, 200, 200)

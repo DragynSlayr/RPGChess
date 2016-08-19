@@ -80,6 +80,7 @@ function Board.checkClick(row, col, button)
                   if p.health <= 0 then
                     piece.row = p.row
                     piece.column = p.column
+                    p:onDeath()
                   end
                   piece.active = false
                   piece.moves = {}
