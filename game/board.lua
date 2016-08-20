@@ -3,8 +3,6 @@ Piece = require("game.piece")
 
 function Board.load()
   Board.sprite = Sprite.load("background/board.tga", 1080, 1080)
-  Board.turn_indicator = Sprite.load("background/turn.tga", 210, 106)
-  Board.turn_indicator:setScale(2, 1.5)
   
   Board.player_one_color = {255, 0, 0}
   Board.player_two_color = {0, 0, 255}
@@ -159,26 +157,27 @@ end
 function Board.draw()
   Sprite.draw(Board.sprite, Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2)
   
+  for row = 1, Constants.NUM_ROWS do
+    for col = 1, Constants.NUM_COLUMNS do
+      local x = Constants.BOARD_ORIGIN_X + ((row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
+      local y = Constants.BOARD_ORIGIN_Y + ((col - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE)) + Constants.CELL_HEIGHT
+      local r, g, b, a = love.graphics.getColor()
+      
+      if ((row + col) % 2 == 0) then
+        love.graphics.setColor(204, 153, 0, 255)
+      else
+        love.graphics.setColor(102, 51, 0, 255)
+      end
+      
+      love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, -Constants.CELL_HEIGHT)
+      
+      love.graphics.setColor(r, g, b, a)
+    end
+  end
+  
   for k, piece in pairs(Board.pieces) do 
     piece:draw()
   end
-  
-  --[[
-  local r, g, b, a = love.graphics.getColor()
-  --love.graphics.setColor(255, 255, 255, 255)
-  
-  local x, y = ((Constants.SCREEN_WIDTH - Constants.BOARD_WIDTH) / 4), (Constants.SCREEN_HEIGHT / 2)
-  
-  if Board.current_player == 1 then
-    love.graphics.setColor(255, 127, 0, 255)
-    --Sprite.draw(Board.turn_indicator, x, y)
-  elseif Board.current_player == 2 then
-    love.graphics.setColor(0, 127, 255, 255)
-    --Sprite.draw(Board.turn_indicator, Constants.SCREEN_WIDTH - x, y)
-  end
-  
-  love.graphics.setColor(r, g, b, a)
-  ]]
 end
 
 return Board

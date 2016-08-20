@@ -13,8 +13,10 @@ Piece.available_sprite:setAnimation(0)
 Piece.available_sprite:setRotation(math.pi / 180)
 
 Piece.selected_sprite = Sprite.load("background/selected.tga", 126, 126)
-Piece.selected_sprite:setAnimation(0.8)
-Piece.selected_sprite:setRotation(-math.pi / 120)
+Piece.selected_sprite:setAnimation(0.5)
+Piece.selected_sprite:setRotation(math.pi / 120)
+
+Piece.font = love.graphics.newFont("assets/fonts/op.ttf", 20)
 
 function Piece.newPiece(row, column, team)
   local piece = {}
@@ -61,23 +63,32 @@ function Piece.newPiece(row, column, team)
   function piece:draw()
     local r, g, b, a = love.graphics.getColor()
     
+    --[[
     if self.active then
       love.graphics.setColor(0, 255, 0, 100)
     else
       love.graphics.setColor(self.color[1], self.color[2], self.color[3], 50)
     end
     
-    love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y + (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, -Constants.CELL_HEIGHT / (self.max_health / self.health))
+    --love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y + (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, -Constants.CELL_HEIGHT / (self.max_health / self.health))
+    ]]
+    
+    love.graphics.setFont(Piece.font)
+    local s = string.format("%.0f", (self.health / self.max_health) * 100)
+    
+    love.graphics.setColor(self.color[1], self.color[2], self.color[3], 100)
+    love.graphics.print(s, self.x - (Constants.CELL_WIDTH / 2), self.y - (Constants.CELL_HEIGHT / 2))
     
     if self.active then
-      love.graphics.setColor(self.color[1], 127, self.color[3], 127)
+      love.graphics.setColor(0, 255, 0, 255)
       Sprite.draw(Piece.selected_sprite, self.x, self.y)
       
-      love.graphics.setColor(self.color[1], 255, self.color[3], 100)
+      love.graphics.setColor(self.color[1], 255, self.color[3], 255)
       
       for k, move in pairs(self.moves) do
         local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
         local y = Constants.BOARD_ORIGIN_Y + ((move.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+        
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
       
@@ -89,7 +100,7 @@ function Piece.newPiece(row, column, team)
         love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
     elseif (Board.current_player == self.team) then
-      love.graphics.setColor(self.color[1], 127, self.color[3], 127)
+      love.graphics.setColor(self.color[1], 255, self.color[3], 255)
       Sprite.draw(Piece.available_sprite, self.x, self.y)
     end
     
