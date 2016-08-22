@@ -51,7 +51,7 @@ function Driver.draw()
     Renderer.render()
   elseif (State.current == State.game_over) then
     love.graphics.setFont(Driver.font)
-    love.graphics.printf(Driver.end_string, 0, (Constants.SCREEN_HEIGHT - Driver.font:getHeight(Driver.end_string)) / 2, Constants.SCREEN_WIDTH, "center")
+    love.graphics.printf(Driver.end_string, 0, (Constants.SCREEN_HEIGHT / 2) - Driver.font:getHeight(Driver.end_string), Constants.SCREEN_WIDTH, "center")
   end
 end
 
