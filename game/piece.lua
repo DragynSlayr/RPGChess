@@ -20,6 +20,10 @@ Piece.health_sprite = Sprite.load("background/health.tga", 126, 126)
 Piece.health_sprite:setAnimation(0)
 Piece.health_sprite:setRotation(math.pi / 180)
 
+Piece.move_sprite = Sprite.load("background/move.tga", 32, 32)
+Piece.move_sprite:setAnimation(0)
+Piece.move_sprite:setRotation(-math.pi / 120)
+
 Piece.font = love.graphics.newFont("assets/fonts/op.ttf", 20)
 
 function Piece.newPiece(row, column, team)
@@ -155,10 +159,11 @@ function Piece.drawMoves()
       love.graphics.setColor(piece.color[1], 255, piece.color[3], 255)
       
       for k2, move in pairs(piece.moves) do
-        local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
-        local y = Constants.BOARD_ORIGIN_Y + ((move.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+        local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE)) + (Constants.CELL_WIDTH / 2)
+        local y = Constants.BOARD_ORIGIN_Y + ((move.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE)) + (Constants.CELL_HEIGHT / 2)
         
-        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
+        --love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
+        Sprite.draw(Piece.move_sprite, x, y)
       end
       
       love.graphics.setColor(r, g, b, a)
@@ -170,13 +175,14 @@ function Piece.drawAttacks()
   for k, piece in pairs(Board.pieces) do
     if piece.active then
       local r, g, b, a = love.graphics.getColor()
-      love.graphics.setColor(piece.color[1], 50, piece.color[3], 200)
+      love.graphics.setColor(piece.color[1], 127, piece.color[3], 255)
       
       for k2, attack in pairs(piece.attacks) do
-        local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
-        local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+        local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE)) + (Constants.CELL_WIDTH / 2)
+        local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE)) + (Constants.CELL_HEIGHT / 2)
         
-        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
+        Sprite.draw(Piece.selected_sprite, x, y)
+        --love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
       end
       
       love.graphics.setColor(r, g, b, a)
@@ -217,13 +223,13 @@ function Piece.drawHealth()
     love.graphics.setFont(Piece.font)
     
     for k, piece in pairs(Board.pieces) do
-      love.graphics.setColor(piece.color[1], piece.color[2], piece.color[3], 100)
+      love.graphics.setColor(piece.color[1], piece.color[2], piece.color[3], 255)
       Sprite.draw(Piece.health_sprite, piece.x, piece.y)
       
       local health = (piece.health / piece.max_health)
       
       love.graphics.setColor(0, 255, 0, 255)
-      love.graphics.circle("fill", piece.x, piece.y, ((126 / 2) - 6) * math.min(health, 100), 360)
+      love.graphics.circle("fill", piece.x, piece.y, ((126 / 2) - 7) * math.min(health, 100), 360)
     end
     
   love.graphics.setColor(r, g, b, a)

@@ -154,6 +154,7 @@ function Board.update(dt)
     Piece.available_sprite:update(dt)
     Piece.selected_sprite:update(dt)
     Piece.health_sprite:update(dt)
+    Piece.move_sprite:update(dt)
 end
 
 function Board.draw()
@@ -164,9 +165,9 @@ function Board.draw()
       local r, g, b, a = love.graphics.getColor()
       
       if ((row + col) % 2 == 0) then
-        love.graphics.setColor(204, 153, 0, 255)
+        love.graphics.setColor(204, 153, 0, 127)
       else
-        love.graphics.setColor(102, 51, 0, 255)
+        love.graphics.setColor(102, 51, 0, 127)
       end
       
       love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, -Constants.CELL_HEIGHT)
