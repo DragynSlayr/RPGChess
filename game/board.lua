@@ -153,6 +153,7 @@ function Board.update(dt)
     
     Piece.available_sprite:update(dt)
     Piece.selected_sprite:update(dt)
+    Piece.health_sprite:update(dt)
 end
 
 function Board.draw()

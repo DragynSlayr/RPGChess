@@ -16,6 +16,10 @@ Piece.selected_sprite = Sprite.load("background/selected.tga", 126, 126)
 Piece.selected_sprite:setAnimation(0.5)
 Piece.selected_sprite:setRotation(math.pi / 120)
 
+Piece.health_sprite = Sprite.load("background/health.tga", 126, 126)
+Piece.health_sprite:setAnimation(0)
+Piece.health_sprite:setRotation(math.pi / 180)
+
 Piece.font = love.graphics.newFont("assets/fonts/op.ttf", 20)
 
 function Piece.newPiece(row, column, team)
@@ -213,10 +217,13 @@ function Piece.drawHealth()
     love.graphics.setFont(Piece.font)
     
     for k, piece in pairs(Board.pieces) do
-      local s = string.format("%.0f", (piece.health / piece.max_health) * 100)
-    
       love.graphics.setColor(piece.color[1], piece.color[2], piece.color[3], 100)
-      love.graphics.print(s, piece.x - (Constants.CELL_WIDTH / 2), piece.y - (Constants.CELL_HEIGHT / 2))
+      Sprite.draw(Piece.health_sprite, piece.x, piece.y)
+      
+      local health = (piece.health / piece.max_health)
+      
+      love.graphics.setColor(0, 255, 0, 255)
+      love.graphics.circle("fill", piece.x, piece.y, ((126 / 2) - 6) * math.min(health, 100), 360)
     end
     
   love.graphics.setColor(r, g, b, a)
