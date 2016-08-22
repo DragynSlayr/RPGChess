@@ -60,56 +60,6 @@ function Piece.newPiece(row, column, team)
     end
   end
   
-  function piece:draw()
-    local r, g, b, a = love.graphics.getColor()
-    
-    --[[
-    if self.active then
-      love.graphics.setColor(0, 255, 0, 100)
-    else
-      love.graphics.setColor(self.color[1], self.color[2], self.color[3], 50)
-    end
-    
-    --love.graphics.rectangle("fill", self.x - (Constants.CELL_WIDTH / 2), self.y + (Constants.CELL_HEIGHT / 2), Constants.CELL_WIDTH, -Constants.CELL_HEIGHT / (self.max_health / self.health))
-    ]]
-    
-    love.graphics.setFont(Piece.font)
-    local s = string.format("%.0f", (self.health / self.max_health) * 100)
-    
-    love.graphics.setColor(self.color[1], self.color[2], self.color[3], 100)
-    love.graphics.print(s, self.x - (Constants.CELL_WIDTH / 2), self.y - (Constants.CELL_HEIGHT / 2))
-    
-    if self.active then
-      love.graphics.setColor(0, 255, 0, 255)
-      Sprite.draw(Piece.selected_sprite, self.x, self.y)
-      
-      love.graphics.setColor(self.color[1], 255, self.color[3], 255)
-      
-      for k, move in pairs(self.moves) do
-        local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
-        local y = Constants.BOARD_ORIGIN_Y + ((move.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
-        
-        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
-      end
-      
-      love.graphics.setColor(self.color[1], 50, self.color[3], 200)
-      
-      for k, attack in pairs(self.attacks) do
-        local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
-        local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
-        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
-      end
-    elseif (Board.current_player == self.team) then
-      love.graphics.setColor(self.color[1], 255, self.color[3], 255)
-      Sprite.draw(Piece.available_sprite, self.x, self.y)
-    end
-    
-    love.graphics.setColor(self.color[1], 127, self.color[3], 255)
-    Sprite.draw(self.sprite, self.x, self.y)
-    
-    love.graphics.setColor(r, g, b, a)
-  end
-  
   function piece:onClick(player)
     if player == self.team then
       self.active = not self.active
@@ -192,6 +142,85 @@ function Piece.newPiece(row, column, team)
   setmetatable(piece, {__tostring = function(t) return string.format("R: %d, C: %d, T: %d, P: %s", t.column, t.row, t.team, t.type) end})
   
   return piece
+end
+
+function Piece.drawMoves()
+  for k, piece in pairs(Board.pieces) do
+    if piece.active then
+      local r, g, b, a = love.graphics.getColor()
+      love.graphics.setColor(piece.color[1], 255, piece.color[3], 255)
+      
+      for k2, move in pairs(piece.moves) do
+        local x = Constants.BOARD_ORIGIN_X + ((move.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
+        local y = Constants.BOARD_ORIGIN_Y + ((move.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+        
+        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
+      end
+      
+      love.graphics.setColor(r, g, b, a)
+    end
+  end
+end
+
+function Piece.drawAttacks()
+  for k, piece in pairs(Board.pieces) do
+    if piece.active then
+      local r, g, b, a = love.graphics.getColor()
+      love.graphics.setColor(piece.color[1], 50, piece.color[3], 200)
+      
+      for k2, attack in pairs(piece.attacks) do
+        local x = Constants.BOARD_ORIGIN_X + ((attack.row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
+        local y = Constants.BOARD_ORIGIN_Y + ((attack.column - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE))
+        
+        love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT)
+      end
+      
+      love.graphics.setColor(r, g, b, a)
+    end
+  end
+end
+
+function Piece.drawBG()
+  local r, g, b, a = love.graphics.getColor()
+  
+  for k, piece in pairs(Board.pieces) do  
+    if piece.active then 
+      love.graphics.setColor(0, 255, 0, 255)
+      Sprite.draw(Piece.selected_sprite, piece.x, piece.y)
+    elseif (Board.current_player == piece.team) then
+      love.graphics.setColor(piece.color[1], 255, piece.color[3], 255)
+      Sprite.draw(Piece.available_sprite, piece.x, piece.y)
+    end
+  end
+  
+  love.graphics.setColor(r, g, b, a)
+end
+
+function Piece.drawSprite()
+  local r, g, b, a = love.graphics.getColor()
+    
+    for k, piece in pairs(Board.pieces) do
+      love.graphics.setColor(piece.color[1], 127, piece.color[3], 255)
+      Sprite.draw(piece.sprite, piece.x, piece.y)
+    end
+    
+  love.graphics.setColor(r, g, b, a)
+end
+
+function Piece.drawHealth()
+    local r, g, b, a = love.graphics.getColor()
+    local font = love.graphics.getFont()
+    love.graphics.setFont(Piece.font)
+    
+    for k, piece in pairs(Board.pieces) do
+      local s = string.format("%.0f", (piece.health / piece.max_health) * 100)
+    
+      love.graphics.setColor(piece.color[1], piece.color[2], piece.color[3], 100)
+      love.graphics.print(s, piece.x - (Constants.CELL_WIDTH / 2), piece.y - (Constants.CELL_HEIGHT / 2))
+    end
+    
+  love.graphics.setColor(r, g, b, a)
+  love.graphics.setFont(font)
 end
 
 return Piece

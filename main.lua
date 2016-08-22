@@ -1,5 +1,6 @@
 MathHelper = require("utils.mathHelper")
 Constants = require("utils.constants")
+Renderer = require("utils.renderer")
 Sprite = require("utils.sprite")
 Driver = require("utils.driver")
 
@@ -17,5 +18,4 @@ love.update = Driver.update
 love.draw = Driver.draw
 
 --Change background color
-love.graphics.setBackgroundColor(200, 188, 146, 255)
---love.graphics.setBackgroundColor(255, 255, 255, 255)
+love.graphics.setBackgroundColor(200, 200, 200, 255)

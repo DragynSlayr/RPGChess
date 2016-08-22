@@ -150,13 +150,12 @@ function Board.update(dt)
     for k, piece in pairs(Board.pieces) do
       piece:update(dt)
     end
+    
     Piece.available_sprite:update(dt)
     Piece.selected_sprite:update(dt)
 end
 
 function Board.draw()
-  Sprite.draw(Board.sprite, Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2)
-  
   for row = 1, Constants.NUM_ROWS do
     for col = 1, Constants.NUM_COLUMNS do
       local x = Constants.BOARD_ORIGIN_X + ((row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
@@ -173,10 +172,6 @@ function Board.draw()
       
       love.graphics.setColor(r, g, b, a)
     end
-  end
-  
-  for k, piece in pairs(Board.pieces) do 
-    piece:draw()
   end
 end
 
