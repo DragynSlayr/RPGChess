@@ -9,6 +9,8 @@ function Board.load()
   
   Board.pieces = {}
   Board.fill()
+  
+  Board.graveyard = {}
 end
 
 function Board.fill()

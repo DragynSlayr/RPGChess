@@ -29,6 +29,15 @@ Piece.move_sprite:setRotation(-math.pi / 120)
 
 Piece.font = love.graphics.newFont("assets/fonts/op.ttf", 20)
 
+Piece.red_death_x = 0
+Piece.red_death_y = 0
+
+Piece.blue_death_x = 0
+Piece.blue_death_y = 0
+
+Piece.red_dead = 0
+Piece.blue_dead = 0
+
 function Piece.newPiece(row, column, team)
   local piece = {}
   piece.moves = {}
@@ -63,9 +72,13 @@ function Piece.newPiece(row, column, team)
         self.alive = false
       end
     else
+      self.x = self.death_x
+      self.y = self.death_y
+      
       for k, piece in pairs(Board.pieces) do
         if self == piece then
           table.remove(Board.pieces, k)
+          table.insert(Board.graveyard, piece)
         end
       end
     end
@@ -143,17 +156,32 @@ function Piece.newPiece(row, column, team)
   end
   
   function piece:onDeath()
-    if (self.type == "King") then
-      State.current = State.game_over
-      local s = "\n"
+    if self.team == 1 then
+      self.death_x = Constants.RED_GRAVE_X + Piece.red_death_x
+      self.death_y = Constants.RED_GRAVE_Y + Piece.red_death_y
       
-      if (self.team == 1) then
-        s = s .. "Blue Team Wins!"
-      else
-        s = s .. "Red Team Wins!"
+      local inc = Constants.GRAVE_X_INCREMENT
+      if Piece.red_dead % 2 == 0 then
+        inc = -Constants.GRAVE_X_INCREMENT
       end
       
-      Driver.end_string = Driver.end_string .. s
+      Piece.red_death_x = Piece.red_death_x + inc
+      Piece.red_death_y = Piece.red_death_y + Constants.GRAVE_Y_INCREMENT
+      
+      Piece.red_dead = Piece.red_dead + 1
+    else
+      self.death_x = Constants.BLUE_GRAVE_X + Piece.blue_death_x
+      self.death_y = Constants.BLUE_GRAVE_Y + Piece.blue_death_y
+      
+      local inc = Constants.GRAVE_X_INCREMENT
+      if Piece.blue_dead % 2 == 1 then
+        inc = -Constants.GRAVE_X_INCREMENT
+      end
+      
+      Piece.blue_death_x = Piece.blue_death_x + inc
+      Piece.blue_death_y = Piece.blue_death_y + Constants.GRAVE_Y_INCREMENT
+      
+      Piece.blue_dead = Piece.blue_dead + 1
     end
   end
   
@@ -201,7 +229,7 @@ end
 function Piece.drawBG()
   local r, g, b, a = love.graphics.getColor()
   
-  for k, piece in pairs(Board.pieces) do  
+  for k, piece in pairs(Board.pieces) do
     if piece.active then 
       love.graphics.setColor(255, 255, 0, 255)
       Sprite.draw(Piece.selected_sprite, piece.x, piece.y)
@@ -219,6 +247,11 @@ function Piece.drawSprite()
     
     for k, piece in pairs(Board.pieces) do
       love.graphics.setColor(piece.color[1], 127, piece.color[3], 255)
+      Sprite.draw(piece.sprite, piece.x, piece.y)
+    end
+    
+    for k, piece in pairs(Board.graveyard) do
+      love.graphics.setColor(255, 255, 255, 255)
       Sprite.draw(piece.sprite, piece.x, piece.y)
     end
     

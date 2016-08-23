@@ -4,7 +4,7 @@ Renderer = require("utils.renderer")
 Sprite = require("utils.sprite")
 Driver = require("utils.driver")
 
-debugging = true
+debugging = false
 
 -- Register mouse events
 love.mousepressed = Driver.mousePressed

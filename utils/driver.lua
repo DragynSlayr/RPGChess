@@ -12,6 +12,10 @@ function Driver.mousePressed(x, y, button, is_touch)
     love.event.quit()
   end
   
+  if (debugging) then
+    print(x .. ", " .. y)
+  end
+  
   if (State.current == State.running) then
     if (button == 1) then
       if Board.getLocation(x, y) ~= nil then

@@ -48,6 +48,19 @@ function King.newKing(row, column, team)
     end
   end
   
+  function king:onDeath()
+    State.current = State.game_over
+    local s = "\n"
+    
+    if (self.team == 1) then
+      s = s .. "Blue Team Wins!"
+    else
+      s = s .. "Red Team Wins!"
+    end
+    
+    Driver.end_string = Driver.end_string .. s
+  end
+  
   return king
 end
 
