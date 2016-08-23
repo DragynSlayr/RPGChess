@@ -52,11 +52,7 @@ function King.newKing(row, column, team)
     State.current = State.game_over
     local s = "\n"
     
-    if (self.team == 1) then
-      s = s .. "Blue Team Wins!"
-    else
-      s = s .. "Red Team Wins!"
-    end
+    s = s .. "Player " .. self.enemy .. " Wins!"
     
     Driver.end_string = Driver.end_string .. s
   end

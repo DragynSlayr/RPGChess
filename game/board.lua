@@ -145,14 +145,11 @@ function Board.nextPlayer()
 end
 
 function Board.update(dt)
-    for k, piece in pairs(Board.pieces) do
-      piece:update(dt)
-    end
-    
-    Piece.available_sprite:update(dt)
-    Piece.selected_sprite:update(dt)
-    Piece.health_sprite:update(dt)
-    Piece.move_sprite:update(dt)
+  for k, piece in pairs(Board.pieces) do
+    piece:update(dt)
+  end
+  
+  Piece.updateSprites(dt)
 end
 
 function Board.draw()

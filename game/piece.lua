@@ -11,32 +11,36 @@ Pawn = require("pieces.pawn")
 Queen = require("pieces.queen")
 Rook = require("pieces.rook")
 
-Piece.available_sprite = Sprite.load("background/available.tga", 126, 126)
-Piece.available_sprite:setAnimation(0)
-Piece.available_sprite:setRotation(math.pi / 180)
+function Piece.init()
+  Piece.available_sprite = Sprite.load("background/available.tga", 126, 126)
+  Piece.available_sprite:setAnimation(0)
+  Piece.available_sprite:setRotation(math.pi / 180)
 
-Piece.selected_sprite = Sprite.load("background/selected.tga", 126, 126)
-Piece.selected_sprite:setAnimation(0.5)
-Piece.selected_sprite:setRotation(math.pi / 120)
+  Piece.selected_sprite = Sprite.load("background/selected.tga", 126, 126)
+  Piece.selected_sprite:setAnimation(0.5)
+  Piece.selected_sprite:setRotation(math.pi / 120)
 
-Piece.health_sprite = Sprite.load("background/health.tga", 126, 126)
-Piece.health_sprite:setAnimation(0)
-Piece.health_sprite:setRotation(math.pi / 180)
+  Piece.health_sprite = Sprite.load("background/health.tga", 126, 126)
+  Piece.health_sprite:setAnimation(0)
+  Piece.health_sprite:setRotation(0)
+  Piece.health_sprite.rotation = math.pi / 4
+  
+  
+  Piece.move_sprite = Sprite.load("background/move.tga", 32, 32)
+  Piece.move_sprite:setAnimation(0)
+  Piece.move_sprite:setRotation(-math.pi / 120)
 
-Piece.move_sprite = Sprite.load("background/move.tga", 32, 32)
-Piece.move_sprite:setAnimation(0)
-Piece.move_sprite:setRotation(-math.pi / 120)
+  Piece.font = love.graphics.newFont("assets/fonts/op.ttf", 20)
 
-Piece.font = love.graphics.newFont("assets/fonts/op.ttf", 20)
+  Piece.red_death_x = 0
+  Piece.red_death_y = 0
 
-Piece.red_death_x = 0
-Piece.red_death_y = 0
+  Piece.blue_death_x = 0
+  Piece.blue_death_y = 0
 
-Piece.blue_death_x = 0
-Piece.blue_death_y = 0
-
-Piece.red_dead = 0
-Piece.blue_dead = 0
+  Piece.red_dead = 0
+  Piece.blue_dead = 0
+end
 
 function Piece.newPiece(row, column, team)
   local piece = {}
@@ -59,8 +63,10 @@ function Piece.newPiece(row, column, team)
   
   if piece.team == 1 then 
     piece.color = Board.player_one_color
+    piece.enemy = 2
   else 
     piece.color = Board.player_two_color
+    piece.enemy = 1
   end
   
   function piece:update(dt)
@@ -264,14 +270,15 @@ function Piece.drawHealth()
     love.graphics.setFont(Piece.font)
     
     for k, piece in pairs(Board.pieces) do
-      love.graphics.setColor(0, 255, 0, 255)
-      Sprite.draw(Piece.health_sprite, piece.x, piece.y)
-      
       local health = math.abs(piece.health / piece.max_health)
       health = math.min(health, 1)
       
-      love.graphics.setColor(piece.color[1], piece.color[2], piece.color[3], 255)
-      love.graphics.circle("fill", piece.x, piece.y, ((126 / 2) - 7) * (1 - health), 100)
+      local r = math.ceil(piece.color[1] * health * 0.5)
+      local g = math.ceil(255 * health)
+      local b = math.ceil(piece.color[3] * health * 0.5)
+      
+      love.graphics.setColor(r, g, b, 255)
+      Sprite.draw(Piece.health_sprite, piece.x, piece.y)
     end
     
   love.graphics.setColor(r, g, b, a)
@@ -287,5 +294,14 @@ function Piece.resetAll()
     end
   end
 end
+
+function Piece.updateSprites(dt)
+  Piece.available_sprite:update(dt)
+  Piece.selected_sprite:update(dt)
+  Piece.health_sprite:update(dt)
+  Piece.move_sprite:update(dt)
+end
+
+Piece.init()
 
 return Piece
