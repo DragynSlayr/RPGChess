@@ -3,9 +3,9 @@ local Rook = {}
 function Rook.newRook(row, column, team)
   local rook = Piece.newPiece(row, column, team)
   
-  rook.max_health = 400
+  rook.max_health = 400 * Piece.health_modifier
   rook.health = rook.max_health
-  rook.damage = 400
+  rook.damage = 400 * Piece.damage_modifier
   
   rook.sprite = Sprite.load("pieces/rook.tga", 72, 126)
   rook.type = "Rook"

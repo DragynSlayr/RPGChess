@@ -116,14 +116,6 @@ function Board.checkClick(row, col, button)
         end
       end
     end
-  elseif button == 2 then
-    if Board.getPieceAt(row, col) ~= nil then
-      local piece = Board.getPieceAt(row, col)
-      
-      piece.active = false
-      piece.moves = {}
-      piece.attacks = {}
-    end
   end
 end
 

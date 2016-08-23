@@ -3,9 +3,9 @@ local Queen = {}
 function Queen.newQueen(row, column, team)
   local queen = Piece.newPiece(row, column, team)
   
-  queen.max_health = 500
+  queen.max_health = 500 * Piece.health_modifier
   queen.health = queen.max_health
-  queen.damage = 500
+  queen.damage = 500 * Piece.damage_modifier
   
   queen.sprite = Sprite.load("pieces/queen.tga", 62, 126)
   queen.type = "Queen"

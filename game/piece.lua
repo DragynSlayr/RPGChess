@@ -1,5 +1,8 @@
 local Piece = {}
 
+Piece.health_modifier = 1
+Piece.damage_modifier = 10
+
 PieceHelper = require("utils.pieceHelper")
 Bishop = require("pieces.bishop")
 King = require("pieces.king")

@@ -3,9 +3,9 @@ local King = {}
 function King.newKing(row, column, team)
   local king = Piece.newPiece(row, column, team)
   
-  king.max_health = 600
+  king.max_health = 600 * Piece.health_modifier
   king.health = king.max_health
-  king.damage = 600
+  king.damage = 600 * Piece.damage_modifier
   
   king.sprite = Sprite.load("pieces/king.tga", 100, 126)
   king.type = "King"

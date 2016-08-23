@@ -3,9 +3,9 @@ local Pawn = {}
 function Pawn.newPawn(row, column, team)
   local pawn = Piece.newPiece(row, column, team)
   
-  pawn.max_health = 100
+  pawn.max_health = 100 * Piece.health_modifier
   pawn.health = pawn.max_health
-  pawn.damage = 100
+  pawn.damage = 100 * Piece.damage_modifier
   
   pawn.sprite = Sprite.load("pieces/pawn.tga", 101, 126)
   pawn.type = "Pawn"

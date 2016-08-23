@@ -13,9 +13,21 @@ function Driver.mousePressed(x, y, button, is_touch)
   end
   
   if (State.current == State.running) then
-    if Board.getLocation(x, y) ~= nil then
-      row, col = Board.getLocation(x, y)
-      Board.checkClick(row, col, button)
+    if (button == 1) then
+      if Board.getLocation(x, y) ~= nil then
+        row, col = Board.getLocation(x, y)
+        Board.checkClick(row, col, button)
+      end
+    elseif (button == 2) then
+      if (Board.getActiveCount() > 0) then
+        for k, piece in pairs(Board.pieces) do
+          if (piece.active) then
+            piece.active = false
+            piece.moves = {}
+            piece.attacks = {}
+          end
+        end
+      end
     end
   end
 end
