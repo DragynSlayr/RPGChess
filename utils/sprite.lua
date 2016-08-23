@@ -59,6 +59,7 @@ function Sprite.load(path, width, height)
         end
       end
     end
+    
     if self.rotating then
       self.rotation = self.rotation + self.angle
     end

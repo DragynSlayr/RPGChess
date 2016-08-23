@@ -1,7 +1,7 @@
 local Piece = {}
 
 Piece.health_modifier = 1
-Piece.damage_modifier = 10
+Piece.damage_modifier = 1
 
 PieceHelper = require("utils.pieceHelper")
 Bishop = require("pieces.bishop")
@@ -135,6 +135,13 @@ function Piece.newPiece(row, column, team)
     end
   end
   
+  function piece:endMove()
+    self.active = false
+    self.moves = {}
+    self.attacks = {}
+    self.moves_made = self.moves_made + 1
+  end
+  
   function piece:onDeath()
     if (self.type == "King") then
       State.current = State.game_over
@@ -196,7 +203,7 @@ function Piece.drawBG()
   
   for k, piece in pairs(Board.pieces) do  
     if piece.active then 
-      love.graphics.setColor(0, 255, 0, 255)
+      love.graphics.setColor(255, 255, 0, 255)
       Sprite.draw(Piece.selected_sprite, piece.x, piece.y)
     elseif (Board.current_player == piece.team) then
       love.graphics.setColor(piece.color[1], 255, piece.color[3], 255)
@@ -224,17 +231,28 @@ function Piece.drawHealth()
     love.graphics.setFont(Piece.font)
     
     for k, piece in pairs(Board.pieces) do
-      love.graphics.setColor(piece.color[1], piece.color[2], piece.color[3], 255)
+      love.graphics.setColor(0, 255, 0, 255)
       Sprite.draw(Piece.health_sprite, piece.x, piece.y)
       
-      local health = (piece.health / piece.max_health)
+      local health = math.abs(piece.health / piece.max_health)
+      health = math.min(health, 1)
       
-      love.graphics.setColor(0, 255, 0, 255)
-      love.graphics.circle("fill", piece.x, piece.y, ((126 / 2) - 7) * math.min(health, 100), 360)
+      love.graphics.setColor(piece.color[1], piece.color[2], piece.color[3], 255)
+      love.graphics.circle("fill", piece.x, piece.y, ((126 / 2) - 7) * (1 - health), 100)
     end
     
   love.graphics.setColor(r, g, b, a)
   love.graphics.setFont(font)
+end
+
+function Piece.resetAll()
+  for k, piece in pairs(Board.pieces) do
+    if (piece.active) then
+      piece.active = false
+      piece.moves = {}
+      piece.attacks = {}
+    end
+  end
 end
 
 return Piece

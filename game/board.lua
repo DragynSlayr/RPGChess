@@ -58,64 +58,60 @@ function Board.getLocation(x, y)
   end
 end
 
-function Board.checkClick(row, col, button)
-  if button == 1 then
-    if Board.getPieceAt(row, col) ~= nil then
-      if Board.getActiveCount() == 0 then
-        local piece = Board.getPieceAt(row, col)
-        
-        if not piece.active then
-          piece:onClick(Board.current_player)
-        end
-      else
-        for k, piece in pairs(Board.pieces) do
-          for k2, attack in pairs(piece.attacks) do
-            if attack.row == col and attack.column == row then
-              if Board.getPieceAt(row, col) ~= nil then
-                local p = Board.getPieceAt(row, col)
-                if p.team ~= piece.team then
-                  p.health = p.health - piece.damage
-                  if p.health <= 0 then
-                    piece.row = p.row
-                    piece.column = p.column
-                    p:onDeath()
-                  end
-                  piece.active = false
-                  piece.moves = {}
-                  piece.attacks = {}
-                  piece.moves_made = piece.moves_made + 1
-                  
-                  if Board.current_player == 1 then
-                    Board.current_player = 2
-                  elseif Board.current_player == 2 then
-                    Board.current_player = 1
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    else
-      for k, piece in pairs(Board.pieces) do
-        for k2, move in pairs(piece.moves) do
-          if move.row == col and move.column == row then
-            piece.row = col
-            piece.column = row
-            piece.active = false
-            piece.moves = {}
-            piece.attacks = {}
-            piece.moves_made = piece.moves_made + 1
-            
-            if Board.current_player == 1 then
-              Board.current_player = 2
-            elseif Board.current_player == 2 then
-              Board.current_player = 1
-            end
-          end
+function Board.checkClick(row, col)
+  if Board.getPieceAt(row, col) ~= nil then
+    Board.handleAttack(row, col)
+  else
+    Board.handleMovement(row, col)
+  end
+end
+
+function Board.handleAttack(row, col)
+  if Board.getActiveCount() == 0 then
+    local piece = Board.getPieceAt(row, col)
+    
+    if not piece.active then
+      piece:onClick(Board.current_player)
+    end
+  else
+    for k, piece in pairs(Board.pieces) do
+      for k2, attack in pairs(piece.attacks) do
+        if attack.row == col and attack.column == row and Board.getPieceAt(row, col) ~= nil then
+          local p = Board.getPieceAt(row, col)
+          Board.attack(piece, p)
         end
       end
     end
+  end
+end
+
+function Board.handleMovement()
+  for k, piece in pairs(Board.pieces) do
+    for k2, move in pairs(piece.moves) do
+      if move.row == col and move.column == row then
+        piece.row = col
+        piece.column = row
+        
+        piece:endMove()
+        Board.nextPlayer()
+      end
+    end
+  end
+end
+
+function Board.attack(attacker, defender)
+  if defender.team ~= attacker.team then
+    defender.health = defender.health - attacker.damage
+    
+    if defender.health <= 0 then
+      attacker.row = defender.row
+      attacker.column = defender.column
+      
+      defender:onDeath()
+    end
+    
+    attacker:endMove()
+    Board.nextPlayer()
   end
 end
 
@@ -136,6 +132,14 @@ function Board.getActiveCount()
   end
   
   return num
+end
+
+function Board.nextPlayer()
+  if Board.current_player == 1 then
+    Board.current_player = 2
+  elseif Board.current_player == 2 then
+    Board.current_player = 1
+  end
 end
 
 function Board.update(dt)

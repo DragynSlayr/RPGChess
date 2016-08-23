@@ -20,13 +20,7 @@ function Driver.mousePressed(x, y, button, is_touch)
       end
     elseif (button == 2) then
       if (Board.getActiveCount() > 0) then
-        for k, piece in pairs(Board.pieces) do
-          if (piece.active) then
-            piece.active = false
-            piece.moves = {}
-            piece.attacks = {}
-          end
-        end
+        Piece.resetAll()
       end
     end
   end
@@ -48,11 +42,10 @@ function Driver.update(dt)
     Renderer.add(function() Sprite.draw(Board.sprite, Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2) end, 1)
     Renderer.add(Board.draw, 2)
     Renderer.add(Piece.drawMoves, 3)
-    Renderer.add(Piece.drawAttacks, 5)
-    Renderer.add(Piece.drawBG, 4)
     Renderer.add(Piece.drawHealth, 3)
-    Renderer.add(Piece.drawBG, 6)
-    Renderer.add(Piece.drawSprite, 7)
+    Renderer.add(Piece.drawAttacks, 4)
+    Renderer.add(Piece.drawBG, 5)
+    Renderer.add(Piece.drawSprite, 6)
   elseif (State.current == State.game_over) then
     
   end
