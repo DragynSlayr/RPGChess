@@ -301,11 +301,14 @@ function Piece.updateSprites(dt)
   Piece.move_sprite:update(dt)
 end
 
-function Piece.load(piece_type, row, column, team, health)
+function Piece.load(piece_type, row, column, team, health, x, y)
   local piece = {}
   
   if piece_type == "Pawn" then
     piece = Pawn.newPawn(column, row, team)
+    if (row ~= 2) and (row ~= 7) then
+      piece.moves_made = 2
+    end
   elseif piece_type == "Rook" then
     piece = Rook.newRook(column, row, team)
   elseif piece_type == "Knight" then
@@ -318,8 +321,19 @@ function Piece.load(piece_type, row, column, team, health)
     piece = King.newKing(column, row, team)
   end
   
-  piece.health = health
-  Board.pieces[#Board.pieces + 1] = piece
+  if x and y then
+    piece.x = x 
+    piece.death_x = x
+    
+    piece.y = y
+    piece.death_y = y
+    
+    piece.alive = false
+    Board.graveyard[#Board.graveyard + 1] = piece
+  else
+    piece.health = health
+    Board.pieces[#Board.pieces + 1] = piece
+  end
 end
 
 Piece.init()

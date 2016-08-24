@@ -1,3 +1,4 @@
+StringHelper = require("utils.stringHelper")
 FileHandler = require("utils.fileHandler")
 MathHelper = require("utils.mathHelper")
 Constants = require("utils.constants")
