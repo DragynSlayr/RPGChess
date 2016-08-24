@@ -3,6 +3,7 @@ Piece = require("game.piece")
 
 function Board.load()
   Board.sprite = Sprite.load("background/board.tga", 1080, 1080)
+  Board.side = Sprite.load("background/side.tga", 420, 1080)
   
   Board.player_one_color = {255, 0, 0}
   Board.player_two_color = {0, 0, 255}
@@ -153,11 +154,18 @@ function Board.update(dt)
 end
 
 function Board.draw()
+  local r, g, b, a = love.graphics.getColor()
+  
+  love.graphics.setColor(Board.player_one_color[1], 100, Board.player_one_color[3], 255)
+  Sprite.draw(Board.side, 210, Constants.SCREEN_HEIGHT / 2)
+  
+  love.graphics.setColor(Board.player_two_color[1], 100, Board.player_two_color[3], 255)
+  Sprite.draw(Board.side, Constants.SCREEN_WIDTH - 210, Constants.SCREEN_HEIGHT / 2)
+  
   for row = 1, Constants.NUM_ROWS do
     for col = 1, Constants.NUM_COLUMNS do
       local x = Constants.BOARD_ORIGIN_X + ((row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
       local y = Constants.BOARD_ORIGIN_Y + ((col - 1) * (Constants.CELL_HEIGHT + Constants.BORDER_SIZE)) + Constants.CELL_HEIGHT
-      local r, g, b, a = love.graphics.getColor()
       
       if ((row + col) % 2 == 0) then
         love.graphics.setColor(204, 153, 0, 127)
@@ -166,10 +174,10 @@ function Board.draw()
       end
       
       love.graphics.rectangle("fill", x, y, Constants.CELL_WIDTH, -Constants.CELL_HEIGHT)
-      
-      love.graphics.setColor(r, g, b, a)
     end
   end
+  
+  love.graphics.setColor(r, g, b, a)
 end
 
 function Board.loadState(file)
