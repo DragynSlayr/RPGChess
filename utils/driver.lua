@@ -33,6 +33,11 @@ end
 function Driver.keyPressed(key, scan_code, is_repeat)
   if key == "escape" then
     love.event.quit()
+  elseif key == "s" then
+    FileHandler.write("save.txt", State.getGameState())
+  elseif key == "l" then
+    local data = FileHandler.read("save.txt")
+    State.loadGameState(data)
   end
 end
 

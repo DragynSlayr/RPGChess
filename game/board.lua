@@ -172,4 +172,8 @@ function Board.draw()
   end
 end
 
+function Board.loadState(file)
+  local s = FileHandler.read(file)
+end
+
 return Board

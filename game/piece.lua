@@ -25,7 +25,6 @@ function Piece.init()
   Piece.health_sprite:setRotation(0)
   Piece.health_sprite.rotation = math.pi / 4
   
-  
   Piece.move_sprite = Sprite.load("background/move.tga", 32, 32)
   Piece.move_sprite:setAnimation(0)
   Piece.move_sprite:setRotation(-math.pi / 120)
@@ -300,6 +299,27 @@ function Piece.updateSprites(dt)
   Piece.selected_sprite:update(dt)
   Piece.health_sprite:update(dt)
   Piece.move_sprite:update(dt)
+end
+
+function Piece.load(piece_type, row, column, team, health)
+  local piece = {}
+  
+  if piece_type == "Pawn" then
+    piece = Pawn.newPawn(column, row, team)
+  elseif piece_type == "Rook" then
+    piece = Rook.newRook(column, row, team)
+  elseif piece_type == "Knight" then
+    piece = Knight.newKnight(column, row, team)
+  elseif piece_type == "Bishop" then
+    piece = Bishop.newBishop(column, row, team)
+  elseif piece_type == "Queen" then
+    piece = Queen.newQueen(column, row, team)
+  else
+    piece = King.newKing(column, row, team)
+  end
+  
+  piece.health = health
+  Board.pieces[#Board.pieces + 1] = piece
 end
 
 Piece.init()
