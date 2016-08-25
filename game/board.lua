@@ -156,11 +156,15 @@ end
 function Board.draw()
   local r, g, b, a = love.graphics.getColor()
   
-  love.graphics.setColor(Board.player_one_color[1], 100, Board.player_one_color[3], 255)
   Sprite.draw(Board.side, 210, Constants.SCREEN_HEIGHT / 2)
-  
-  love.graphics.setColor(Board.player_two_color[1], 100, Board.player_two_color[3], 255)
   Sprite.draw(Board.side, Constants.SCREEN_WIDTH - 210, Constants.SCREEN_HEIGHT / 2)
+  
+  love.graphics.setColor(Board.player_one_color[1], 100, Board.player_one_color[3], 127)
+  love.graphics.rectangle("fill", 0, Constants.SCREEN_HEIGHT, 420, -Constants.SCREEN_HEIGHT)
+  
+  love.graphics.setColor(Board.player_two_color[1], 100, Board.player_two_color[3], 127)
+  love.graphics.rectangle("fill", 420 + Constants.BOARD_WIDTH, Constants.SCREEN_HEIGHT, 420, -Constants.SCREEN_HEIGHT)
+  
   
   for row = 1, Constants.NUM_ROWS do
     for col = 1, Constants.NUM_COLUMNS do
