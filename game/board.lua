@@ -165,7 +165,6 @@ function Board.draw()
   love.graphics.setColor(Board.player_two_color[1], 100, Board.player_two_color[3], 127)
   love.graphics.rectangle("fill", 420 + Constants.BOARD_WIDTH, Constants.SCREEN_HEIGHT, 420, -Constants.SCREEN_HEIGHT)
   
-  
   for row = 1, Constants.NUM_ROWS do
     for col = 1, Constants.NUM_COLUMNS do
       local x = Constants.BOARD_ORIGIN_X + ((row - 1) * (Constants.CELL_WIDTH + Constants.BORDER_SIZE))
