@@ -24,27 +24,23 @@ end
 function State.loadGameState(data)
   Board.pieces = {}
   for line in data:gmatch("%S+") do
-    if (line:sub(1, 6) == "Player") then
-      local _, player = line:match("([^:]+):([^:]+)")
-      Board.current_player = tonumber(player)
-    elseif (StringHelper.countSub(line, ":") == 5) then
-      local x1, y1, x2, y2, d1, d2 = line:match("([^:]+):([^:]+):([^:]+):([^:]+):([^:]+):([^:]+)")
+    local s = StringHelper.split(line, ":")
+    if (#s == 2) then
+      Board.current_player = tonumber(s[2])
+    elseif (#s == 6) then
+      Piece.red_death_x = tonumber(s[1])
+      Piece.red_death_y = tonumber(s[2])
       
-      Piece.red_death_x = tonumber(x1)
-      Piece.red_death_y = tonumber(y1)
+      Piece.blue_death_x = tonumber(s[3])
+      Piece.blue_death_y = tonumber(s[4])
       
-      Piece.blue_death_x = tonumber(x2)
-      Piece.blue_death_y = tonumber(y2)
-      
-      Piece.red_dead = tonumber(d1)
-      Piece.blue_dead = tonumber(d2)
+      Piece.red_dead = tonumber(s[5])
+      Piece.blue_dead = tonumber(s[6])
     else
       if (line:sub(1, 4) == "Dead") then
-        local _, piece_type, row, column, team, health, x, y = line:match("([^:]+):([^:]+):([^:]+):([^:]+):([^:]+):([^:]+):([^:]+):([^:]+)")
-        Piece.load(piece_type, tonumber(row), tonumber(column), tonumber(team), tonumber(health), tonumber(x), tonumber(y))
+        Piece.load(s[2], tonumber(s[3]), tonumber(s[4]), tonumber(s[5]), tonumber(s[6]), tonumber(s[7]), tonumber(s[8]))
       else
-        local piece_type, row, column, team, health = line:match("([^:]+):([^:]+):([^:]+):([^:]+):([^:]+)")
-        Piece.load(piece_type, tonumber(row), tonumber(column), tonumber(team), tonumber(health))
+        Piece.load(s[1], tonumber(s[2]), tonumber(s[3]), tonumber(s[4]), tonumber(s[5]))
       end
     end
   end
